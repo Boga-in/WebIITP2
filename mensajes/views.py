@@ -21,14 +21,31 @@ def crear_mensaje(request):
 
     return render(request, 'crear_mensaje.html', {'form': form})
 
-def ver_mensajes_recibidos(request, destinatario):
-    mensajes_recibidos = Mensaje.objects.filter(destinatario=destinatario).order_by('fecha_hora')
-    return render(request, 'recibidos.html', {'mensajes': mensajes_recibidos})
+def filtrar_mensajes(request):
+    # Obtener listas de remitentes y destinatarios distintos
+    remitentes = Mensaje.objects.values_list('remitente', flat=True).distinct()
+    destinatarios = Mensaje.objects.values_list('destinatario', flat=True).distinct()
 
+    mensajes_filtrados = None  # Inicialmente la lista de mensajes es vacía
 
-def ver_mensajes_enviados(request, remitente):
-    mensajes_enviados = Mensaje.objects.filter(remitente=remitente).order_by('fecha_hora')
-    return render(request, 'enviados.html', {'mensajes': mensajes_enviados})
+    # Filtrar mensajes si se seleccionó un remitente o destinatario
+    if request.method == 'POST':
+        remitente_seleccionado = request.POST.get('remitente')
+        destinatario_seleccionado = request.POST.get('destinatario')
+
+        mensajes_filtrados = Mensaje.objects.all()
+
+        if remitente_seleccionado:
+            mensajes_filtrados = mensajes_filtrados.filter(remitente=remitente_seleccionado)
+        if destinatario_seleccionado:
+            mensajes_filtrados = mensajes_filtrados.filter(destinatario=destinatario_seleccionado)
+
+    return render(request, 'filtrar.html', {
+        'remitentes': remitentes,
+        'destinatarios': destinatarios,
+        'mensajes': mensajes_filtrados,  # Puede ser None si no hay filtro
+    })
+
 
 
 def eliminar_mensaje(request, mensaje_id):

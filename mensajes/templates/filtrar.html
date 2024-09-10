@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Filtrar Mensajes</h2>
+  <form method="post">
+    {% csrf_token %}
+    <label for="remitente">Filtrar por remitente:</label>
+    <select name="remitente">
+      <option value="">Seleccione un remitente</option>
+      {% for remitente in remitentes %}
+        <option value="{{ remitente }}">{{ remitente }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="destinatario">Filtrar por destinatario:</label>
+    <select name="destinatario">
+      <option value="">Seleccione un destinatario</option>
+      {% for destinatario in destinatarios %}
+        <option value="{{ destinatario }}">{{ destinatario }}</option>
+      {% endfor %}
+    </select>
+
+    <button type="submit">Filtrar</button>
+  </form>
+
+  {% if mensajes %}
+    <h3>Mensajes Filtrados</h3>
+    <ul>
+      {% for mensaje in mensajes %}
+        <li>
+          <strong>Remitente:</strong> {{ mensaje.remitente }} <br>
+          <strong>Destinatario:</strong> {{ mensaje.destinatario }} <br>
+          <strong>Mensaje:</strong> {{ mensaje.texto }} <br>
+          <strong>Fecha:</strong> {{ mensaje.fecha_hora }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No se han encontrado mensajes. Intente aplicar un filtro.</p>
+  {% endif %}
+{% endblock %}
