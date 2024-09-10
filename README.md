@@ -21,11 +21,11 @@
 
 1. **Clonar el repositorio**:
     ```bash
-    git clone git@github.com:Boga-in/Tarea_de_Mensajes.git
+    git clone git@github.com:Boga-in/WebIITP2.git
     ```
 2. **Desplazarnos al repositorio creado**:
     ```bash
-    cd Tarea_de_Mensajes
+    cd WebIITP2
     ```
 3. **Crear un entorno virtual**:
     ```bash
